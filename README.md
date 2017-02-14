@@ -9,7 +9,9 @@ Quick links: [Using](#using) | [Installing](#installing) | [Contributing](#contr
 
 ## Using
 
+`wp zip <plugin|theme> <project-slug>`
 
+The resulting zip folder will be saved to /wp-content/<project-slug>.zip
 
 ## Installing
 
