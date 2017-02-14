@@ -10,7 +10,7 @@ class Process {
 	/**
 	 * @param string $command Command to execute.
 	 * @param string $cwd Directory to execute the command in.
-	 * @param array $env Environment variables to set when running the command.
+	 * @param array  $env Environment variables to set when running the command.
 	 */
 	public static function create( $command, $cwd = null, $env = array() ) {
 		$proc = new self;
@@ -54,7 +54,7 @@ class Process {
 			'return_code' => proc_close( $proc ),
 			'command' => $this->command,
 			'cwd' => $cwd,
-			'env' => $this->env
+			'env' => $this->env,
 		) );
 	}
 
@@ -66,7 +66,7 @@ class Process {
 	public function run_check() {
 		$r = $this->run();
 
-		if ( $r->return_code || !empty( $r->STDERR ) ) {
+		if ( $r->return_code || ! empty( $r->STDERR ) ) {
 			throw new \RuntimeException( $r );
 		}
 

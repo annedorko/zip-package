@@ -1,13 +1,13 @@
 <?php
 
 use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode,
-    WP_CLI\Process;
+	Behat\Gherkin\Node\TableNode,
+	WP_CLI\Process;
 
 function invoke_proc( $proc, $mode ) {
 	$map = array(
 		'run' => 'run_check',
-		'try' => 'run'
+		'try' => 'run',
 	);
 	$method = $map[ $mode ];
 
@@ -43,8 +43,9 @@ $steps->When( "/^I (run|try) `([^`]+)` from '([^\s]+)'$/",
 
 $steps->When( '/^I (run|try) the previous command again$/',
 	function ( $world, $mode ) {
-		if ( !isset( $world->result ) )
+		if ( ! isset( $world->result ) ) {
 			throw new \Exception( 'No previous command.' );
+		}
 
 		$proc = Process::create( $world->result->command, $world->result->cwd, $world->result->env );
 		$world->result = invoke_proc( $proc, $mode );

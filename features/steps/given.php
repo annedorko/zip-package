@@ -1,8 +1,8 @@
 <?php
 
 use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode,
-    WP_CLI\Process;
+	Behat\Gherkin\Node\TableNode,
+	WP_CLI\Process;
 
 $steps->Given( '/^an empty directory$/',
 	function ( $world ) {
@@ -72,24 +72,24 @@ $steps->Given( '/^a WP multisite (subdirectory|subdomain)?\s?install$/',
 
 $steps->Given( '/^these installed and active plugins:$/',
 	function( $world, $stream ) {
-		$plugins = implode( ' ', array_map( 'trim', explode( PHP_EOL, (string)$stream ) ) );
+		$plugins = implode( ' ', array_map( 'trim', explode( PHP_EOL, (string) $stream ) ) );
 		$world->proc( "wp plugin install $plugins --activate" )->run_check();
 	}
 );
 
 $steps->Given( '/^a custom wp-content directory$/',
 	function ( $world ) {
-		$wp_config_path = $world->variables['RUN_DIR'] . "/wp-config.php";
+		$wp_config_path = $world->variables['RUN_DIR'] . '/wp-config.php';
 
 		$wp_config_code = file_get_contents( $wp_config_path );
 
 		$world->move_files( 'wp-content', 'my-content' );
 		$world->add_line_to_wp_config( $wp_config_code,
-			"define( 'WP_CONTENT_DIR', dirname(__FILE__) . '/my-content' );" );
+		"define( 'WP_CONTENT_DIR', dirname(__FILE__) . '/my-content' );" );
 
 		$world->move_files( 'my-content/plugins', 'my-plugins' );
 		$world->add_line_to_wp_config( $wp_config_code,
-			"define( 'WP_PLUGIN_DIR', __DIR__ . '/my-plugins' );" );
+		"define( 'WP_PLUGIN_DIR', __DIR__ . '/my-plugins' );" );
 
 		file_put_contents( $wp_config_path, $wp_config_code );
 	}
@@ -116,10 +116,10 @@ $steps->Given( '/^save (STDOUT|STDERR) ([\'].+[^\'])?as \{(\w+)\}$/',
 
 		if ( $output_filter ) {
 			$output_filter = '/' . trim( str_replace( '%s', '(.+[^\b])', $output_filter ), "' " ) . '/';
-			if ( false !== preg_match( $output_filter, $world->result->$stream, $matches ) )
+			if ( false !== preg_match( $output_filter, $world->result->$stream, $matches ) ) {
 				$output = array_pop( $matches );
-			else
-				$output = '';
+			} else { $output = '';
+			}
 		} else {
 			$output = $world->result->$stream;
 		}
@@ -139,10 +139,10 @@ $steps->Given( '/^save the (.+) file ([\'].+[^\'])?as \{(\w+)\}$/',
 
 		if ( $output_filter ) {
 			$output_filter = '/' . trim( str_replace( '%s', '(.+[^\b])', $output_filter ), "' " ) . '/';
-			if ( false !== preg_match( $output_filter, $full_file, $matches ) )
+			if ( false !== preg_match( $output_filter, $full_file, $matches ) ) {
 				$output = array_pop( $matches );
-			else
-				$output = '';
+			} else { $output = '';
+			}
 		} else {
 			$output = $full_file;
 		}
@@ -151,13 +151,13 @@ $steps->Given( '/^save the (.+) file ([\'].+[^\'])?as \{(\w+)\}$/',
 );
 
 $steps->Given('/^a misconfigured WP_CONTENT_DIR constant directory$/',
-	function($world) {
-		$wp_config_path = $world->variables['RUN_DIR'] . "/wp-config.php";
+	function( $world ) {
+		$wp_config_path = $world->variables['RUN_DIR'] . '/wp-config.php';
 
 		$wp_config_code = file_get_contents( $wp_config_path );
 
 		$world->add_line_to_wp_config( $wp_config_code,
-			"define( 'WP_CONTENT_DIR', '' );" );
+		"define( 'WP_CONTENT_DIR', '' );" );
 
 		file_put_contents( $wp_config_path, $wp_config_code );
 	}
