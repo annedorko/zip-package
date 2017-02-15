@@ -1,7 +1,9 @@
-annedorko/zip-package
+WP CLI Zip Package
 =====================
 
-Zip up themes or folders for delivery elsewhere
+Zip up themes or folders for delivery elsewhere!
+
+Often times, I’m working on a quick project for a client who just needs the zip folder. Nothing fancy, just in and out ZIP delivery.
 
 [![Build Status](https://travis-ci.org/annedorko/zip-package.svg?branch=master)](https://travis-ci.org/annedorko/zip-package)
 
@@ -13,7 +15,11 @@ Quick links: [Using](#using) | [Installing](#installing) | [Contributing](#contr
 
 The resulting zip folder will be saved to /wp-content/project-slug.zip
 
+More arguments will eventually be accepted to customize the output directory and more. If you have your own parameter to add, simply pull a new branch and let me know what you have in mind! You can submit feature requests under Issues.
+
 ## Installing
+
+The official name of this package is `annedorko/zip-package`. I'm still learning how to add this anywhere, so for now you may need to ignore the following installation directions and simply download and install it locally.
 
 Installing this package requires WP-CLI v0.23.0 or greater. Update to the latest stable release with `wp cli update`.
 

@@ -3,7 +3,7 @@
     "description": "Zip up themes or folders for delivery elsewhere",
     "type": "wp-cli-package",
     "homepage": "https://github.com/annedorko/zip-package",
-    "license": "MIT",
+    "license": "GPL-3.0",
     "authors": [],
     "minimum-stability": "dev",
     "autoload": {
