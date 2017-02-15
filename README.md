@@ -31,6 +31,13 @@ We appreciate you taking the initiative to contribute to this project.
 
 Contributing isn’t limited to just code. We encourage you to contribute in the way that best fits your abilities, by writing tutorials, giving a demo at your local meetup, helping other users with their support questions, or revising our documentation.
 
+### Roadmap
+
+A few of the parameters I will personally want to add over time include:
+
+1. Ability to set destination directory
+2. Ability to exclude files or filetypes
+
 ### Reporting a bug
 
 Think you’ve found a bug? We’d love for you to help us get it fixed.
