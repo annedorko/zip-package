@@ -12,7 +12,8 @@ WP_CLI::add_command( 'zip', 'Zip_Package' );
 class Zip_Package {
 
 	private $files 				= array();
-	private $exclude 			= array();
+	private $exclude_dir 	= array( '_scss', '_sass', 'scss', 'sass' );
+	private $exclude_ext 	= array( 'scss', 'sass', 'git', 'gitignore', 'DS_Store' );
 	private $package_name = '';
 	private $destination 	= '';
 	private $folder_to_zip = '';
@@ -75,6 +76,15 @@ class Zip_Package {
 		return $list;
 	}
 
+	private function exclude( $type ) {
+		if ( 'directory' === $type ) {
+			return $this->exclude_dir;
+		}
+		if ( 'extensions' === $type ) {
+			return $this->exclude_ext;
+		}
+	}
+
 	private function zip_file() {
 		$source = $this->folder_to_zip . '/';
 		$save_to = $this->destination . $this->zip_name;
@@ -98,26 +108,54 @@ class Zip_Package {
 
 	    $source = str_replace( '\\', '/', realpath( $source ) );
 
-	    if ( is_dir( $source ) === true ) {
+	    if ( true === is_dir( $source ) ) {
 	        $files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $source ), RecursiveIteratorIterator::SELF_FIRST );
 
 	        foreach ( $files as $file ) {
 	            $file = str_replace( '\\', '/', $file );
 
+							$file_name = substr( $file, strrpos( $file, '/' ) + 1 );
+
 	            // Ignore "." and ".." folders
-	            if ( in_array( substr( $file, strrpos( $file, '/' ) + 1 ), array( '.', '..' ) ) ) {
+	            if ( in_array( $file_name, array( '.', '..' ) ) ) {
 	                continue;
 							}
-
 	            $file = realpath( $file );
 
-	            if ( is_dir( $file ) === true ) {
-	                $zip->addEmptyDir( str_replace( $source . '/', '', $file . '/' ) );
-	            } elseif ( is_file( $file ) === true ) {
-	                $zip->addFromString( str_replace( $source . '/', '', $file ), file_get_contents( $file ) );
+	            if ( true === is_dir( $file ) ) {
+									$is_excluded = false;
+									// Only include directories that aren't excluded
+									$directory = basename( $file );
+									if ( true === in_array( $directory, $this->exclude( 'directory' ) ) ) {
+										WP_CLI::debug( $directory . ' was excluded because it was an excluded directory' );
+										$is_excluded = true;
+									}
+									// Check parent directories
+									$all_directories = explode( '/', $file );
+									foreach ( $all_directories as $parent_dir ) {
+										if ( true === in_array( $parent_dir, $this->exclude( 'directory' ) ) ) {
+											WP_CLI::debug( $directory . ' was excluded because a parent folder was excluded' );
+											$is_excluded = true;
+										}
+									}
+									if ( false === $is_excluded ) {
+										$zip->addEmptyDir( str_replace( $source . '/', '', $file . '/' ) );
+									}
+	            } elseif ( true === is_file( $file ) ) {
+									$is_excluded = false;
+									// Exclude file types
+									$ext = pathinfo( $file, PATHINFO_EXTENSION );
+									if ( true === in_array( $ext, $this->exclude( 'extensions' ) ) ) {
+										WP_CLI::debug( $file . ' was excluded its extension was excluded' );
+										$is_excluded = true;
+									}
+									if ( false === $is_excluded ) {
+										$zip->addFromString( str_replace( $source . '/', '', $file ), file_get_contents( $file ) );
+									}
 	            }
 	        }
-	    } elseif ( is_file( $source ) === true ) {
+	    } elseif ( true === is_file( $source ) ) {
+					// If the plugin is just a file
 	        $zip->addFromString( basename( $source ), file_get_contents( $source ) );
 	    }
 
